@@ -5635,7 +5635,7 @@ components:
           type: string
         organizationID:
           type: string
-        organization:
+        org:
           type: string
         rp:
           type: string
