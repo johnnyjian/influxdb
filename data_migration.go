@@ -28,7 +28,7 @@ type BucketMigrationService interface {
 // as well as the new fields incase of any partial conversion.
 type OldBucket struct {
 	ID                  ID            `json:"id,omitempty"`
-	OrganizationID      ID            `json:"orgID,omitempty"`
+	OrgID               ID            `json:"orgID,omitempty"`
 	Organization        string        `json:"organization,omitempty"`
 	Org                 string        `json:"org,omitempty"`
 	Name                string        `json:"name"`
@@ -38,14 +38,9 @@ type OldBucket struct {
 
 // ConvertOldBucketToNew convert to old bucket to new.
 func ConvertOldBucketToNew(old OldBucket) Bucket {
-	org := old.Org
-	if org == "" && old.Organization != "" {
-		org = old.Organization
-	}
 	return Bucket{
 		ID:                  old.ID,
-		OrganizationID:      old.OrganizationID,
-		Org:                 org,
+		OrgID:               old.OrgID,
 		Name:                old.Name,
 		RetentionPolicyName: old.RetentionPolicyName,
 		RetentionPeriod:     old.RetentionPeriod,

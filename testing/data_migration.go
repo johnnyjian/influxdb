@@ -80,7 +80,7 @@ func ConvertBucketToNew(
 				OldBuckets: []influxdb.OldBucket{
 					{
 						ID:                  MustIDBase16(twoID),
-						OrganizationID:      MustIDBase16(oneID),
+						OrgID:               MustIDBase16(oneID),
 						Name:                "bucket2",
 						Organization:        "org1",
 						RetentionPolicyName: "rp1",
@@ -88,7 +88,7 @@ func ConvertBucketToNew(
 					},
 					{
 						ID:                  MustIDBase16(threeID),
-						OrganizationID:      MustIDBase16(twoID),
+						OrgID:               MustIDBase16(twoID),
 						Name:                "bucket3",
 						Org:                 "org2",
 						RetentionPolicyName: "rp2",
@@ -96,7 +96,7 @@ func ConvertBucketToNew(
 					},
 					{
 						ID:                  MustIDBase16(fourID),
-						OrganizationID:      MustIDBase16(twoID),
+						OrgID:               MustIDBase16(twoID),
 						Name:                "bucket4",
 						Organization:        "org1",
 						Org:                 "org2",
@@ -109,25 +109,22 @@ func ConvertBucketToNew(
 				results: []*influxdb.Bucket{
 					{
 						ID:                  MustIDBase16(twoID),
-						OrganizationID:      MustIDBase16(oneID),
+						OrgID:               MustIDBase16(oneID),
 						Name:                "bucket2",
-						Org:                 "org1",
 						RetentionPolicyName: "rp1",
 						RetentionPeriod:     100 * time.Minute,
 					},
 					{
 						ID:                  MustIDBase16(threeID),
-						OrganizationID:      MustIDBase16(twoID),
+						OrgID:               MustIDBase16(twoID),
 						Name:                "bucket3",
-						Org:                 "org2",
 						RetentionPolicyName: "rp2",
 						RetentionPeriod:     101 * time.Minute,
 					},
 					{
 						ID:                  MustIDBase16(fourID),
-						OrganizationID:      MustIDBase16(twoID),
+						OrgID:               MustIDBase16(twoID),
 						Name:                "bucket4",
-						Org:                 "org2",
 						RetentionPolicyName: "rp3",
 						RetentionPeriod:     102 * time.Minute,
 					},
