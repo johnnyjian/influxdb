@@ -1,14 +1,16 @@
 package influxdb
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 // DataMigrationService will transfer the old stored data to new released version.
 type DataMigrationService interface {
-	// IsMigrated will determine if data already migrated.
+	// CheckAndMigrate will determine if data already migrated.
 	// Usually we will put an index to make sure this the newest version.
-	IsMigrated() bool
-	// ConvertToNew to do a scan to the storage and convert every thing related.
-	ConvertToNew() error
+	// Then do a scan to the storage and convert every thing related.
+	CheckAndMigrate(ctx context.Context) error
 	BucketMigrationService
 }
 
@@ -18,8 +20,8 @@ var BucketIsMigratedIndex = []byte("bucketIsMigrated_org")
 
 // BucketMigrationService will migrate old bucket to the most recent bucket schema.
 type BucketMigrationService interface {
-	IsBucketMigrated() bool
-	ConvertBucketToNew() error
+	IsBucketMigrated(ctx context.Context) bool
+	ConvertBucketToNew(ctx context.Context) error
 }
 
 // OldBucket should includes all old fields of previous bucket schemas,

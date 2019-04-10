@@ -13,6 +13,18 @@ var (
 	migrationV = []byte{0x1}
 )
 
+var _ influxdb.DataMigrationService = (*Service)(nil)
+
+// CheckAndMigrate will check all applicable migration and perform the migration.
+func (s *Service) CheckAndMigrate(ctx context.Context) (err error) {
+	if !s.IsBucketMigrated(ctx) {
+		if err = s.ConvertBucketToNew(ctx); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // IsBucketMigrated will determine if data already migrated.
 func (s *Service) IsBucketMigrated(ctx context.Context) bool {
 	if err := s.kv.View(ctx, func(tx Tx) error {
@@ -67,4 +79,39 @@ func (s *Service) ConvertBucketToNew(ctx context.Context) error {
 		}
 		return index.Put(migrationK, migrationV)
 	})
+}
+
+// PutOldBuckets is for testing migration only.
+func (s *Service) PutOldBuckets(ctx context.Context, bs []influxdb.OldBucket) error {
+	return s.kv.Update(ctx, func(tx Tx) error {
+		for _, b := range bs {
+			if err := s.putOldBucket(ctx, tx, b); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}
+
+// putOldBucket is for testing migration only.
+func (s *Service) putOldBucket(ctx context.Context, tx Tx, b influxdb.OldBucket) error {
+	v, err := json.Marshal(b)
+	if err != nil {
+		return &influxdb.Error{
+			Err: err,
+		}
+	}
+	encodedID, err := b.ID.Encode()
+	if err != nil {
+		return &influxdb.Error{
+			Err: err,
+		}
+	}
+	bkt, err := s.bucketsBucket(tx)
+	if bkt.Put(encodedID, v); err != nil {
+		return &influxdb.Error{
+			Err: err,
+		}
+	}
+	return nil
 }

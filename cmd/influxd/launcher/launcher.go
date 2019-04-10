@@ -409,8 +409,10 @@ func (m *Launcher) run(ctx context.Context) (err error) {
 		return err
 	}
 
-	if !m.kvService.IsBucketMigrated(ctx) {
-		m.kvService.ConvertBucketToNew(ctx)
+	// use unlimited context for data migration for now.
+	if err := m.kvService.CheckAndMigrate(context.Background()); err != nil {
+		m.logger.Error("error in kv data migration service", zap.Error(err))
+		return err
 	}
 
 	m.reg = prom.NewRegistry()
