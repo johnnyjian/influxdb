@@ -20,7 +20,7 @@ import {TimeRange} from 'src/types'
 
 interface Props {
   timeRange: TimeRange
-  onSetTimeRange: (timeRange: TimeRange) => void
+  onSetTimeRange: (timeRange: TimeRange, absoluteRange?: boolean) => void
 }
 
 interface State {
@@ -140,7 +140,7 @@ class TimeRangeDropdown extends PureComponent<Props, State> {
   }
 
   private handleApplyTimeRange = (timeRange: TimeRange) => {
-    this.props.onSetTimeRange(timeRange)
+    this.props.onSetTimeRange(timeRange, true)
     this.handleHideDatePicker()
   }
 

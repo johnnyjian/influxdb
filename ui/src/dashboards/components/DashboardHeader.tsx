@@ -97,7 +97,7 @@ export default class DashboardHeader extends Component<Props> {
             selected={autoRefresh}
           />
           <TimeRangeDropdown
-            onSetTimeRange={handleChooseTimeRange}
+            onSetTimeRange={this.handleSelectTimeRange}
             timeRange={{
               upper: zoomedUpper || upper,
               lower: zoomedLower || lower,
@@ -129,5 +129,22 @@ export default class DashboardHeader extends Component<Props> {
 
   private handleClickPresentationButton = (): void => {
     this.props.handleClickPresentationButton()
+  }
+
+  private handleSelectTimeRange = (
+    timeRange: QueriesModels.TimeRange,
+    absoluteTimeRange?: boolean
+  ): void => {
+    const {
+      handleChooseAutoRefresh,
+      handleChooseTimeRange,
+      autoRefresh,
+    } = this.props
+
+    if (absoluteTimeRange && autoRefresh) {
+      handleChooseAutoRefresh(0)
+    }
+
+    handleChooseTimeRange(timeRange)
   }
 }
