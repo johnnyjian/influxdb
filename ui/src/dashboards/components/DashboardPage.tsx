@@ -59,7 +59,6 @@ interface DispatchProps {
   updateQueryParams: typeof rangesActions.updateQueryParams
   setDashTimeV1: typeof rangesActions.setDashTimeV1
   setZoomedTimeRange: typeof rangesActions.setZoomedTimeRange
-  handleChooseAutoRefresh: AppActions.SetAutoRefreshActionCreator
   handleClickPresentationButton: AppActions.DelayEnablePresentationModeDispatcher
   notify: NotificationsActions.PublishNotificationActionCreator
   onCreateCellWithView: typeof dashboardActions.createCellWithView
@@ -146,7 +145,6 @@ class DashboardPage extends Component<Props, State> {
       onManualRefresh,
       inPresentationMode,
       showVariablesControls,
-      handleChooseAutoRefresh,
       handleClickPresentationButton,
       onToggleShowVariablesControls,
       children,
@@ -166,7 +164,6 @@ class DashboardPage extends Component<Props, State> {
             zoomedTimeRange={zoomedTimeRange}
             onRenameDashboard={this.handleRenameDashboard}
             activeDashboard={dashboard ? dashboard.name : ''}
-            handleChooseAutoRefresh={handleChooseAutoRefresh}
             handleChooseTimeRange={this.handleChooseTimeRange}
             handleClickPresentationButton={handleClickPresentationButton}
             toggleVariablesControlBar={onToggleShowVariablesControls}
@@ -301,12 +298,12 @@ const mstp = (state: AppState, {params: {dashboardID}}): StateProps => {
     links,
     app: {
       ephemeral: {inPresentationMode},
-      persisted: {autoRefresh},
     },
     ranges,
     dashboards,
     views: {views},
     userSettings: {showVariablesControls},
+    autoRefresh,
   } = state
 
   const timeRange =
@@ -332,7 +329,6 @@ const mdtp: DispatchProps = {
   copyCell: dashboardActions.copyDashboardCellAsync,
   deleteCell: dashboardActions.deleteCellAsync,
   updateCells: dashboardActions.updateCellsAsync,
-  handleChooseAutoRefresh: appActions.setAutoRefresh,
   handleClickPresentationButton: appActions.delayEnablePresentationMode,
   notify: notifyActions.notify,
   setDashTimeV1: rangesActions.setDashTimeV1,

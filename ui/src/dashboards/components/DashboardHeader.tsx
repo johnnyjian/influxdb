@@ -31,7 +31,6 @@ interface Props {
   timeRange: QueriesModels.TimeRange
   autoRefresh: number
   handleChooseTimeRange: (timeRange: QueriesModels.TimeRange) => void
-  handleChooseAutoRefresh: AppActions.SetAutoRefreshActionCreator
   onManualRefresh: () => void
   handleClickPresentationButton: AppActions.DelayEnablePresentationModeDispatcher
   onAddCell: () => void
@@ -53,9 +52,7 @@ export default class DashboardHeader extends Component<Props> {
 
   public render() {
     const {
-      handleChooseAutoRefresh,
       onManualRefresh,
-      autoRefresh,
       handleChooseTimeRange,
       timeRange: {upper, lower},
       zoomedTimeRange: {upper: zoomedUpper, lower: zoomedLower},
@@ -91,13 +88,9 @@ export default class DashboardHeader extends Component<Props> {
             text="Add Note"
             onClick={this.handleAddNote}
           />
-          <AutoRefreshDropdown
-            onChoose={handleChooseAutoRefresh}
-            onManualRefresh={onManualRefresh}
-            selected={autoRefresh}
-          />
+          <AutoRefreshDropdown onManualRefresh={onManualRefresh} />
           <TimeRangeDropdown
-            onSetTimeRange={this.handleSelectTimeRange}
+            onSetTimeRange={handleChooseTimeRange}
             timeRange={{
               upper: zoomedUpper || upper,
               lower: zoomedLower || lower,
@@ -129,22 +122,5 @@ export default class DashboardHeader extends Component<Props> {
 
   private handleClickPresentationButton = (): void => {
     this.props.handleClickPresentationButton()
-  }
-
-  private handleSelectTimeRange = (
-    timeRange: QueriesModels.TimeRange,
-    absoluteTimeRange?: boolean
-  ): void => {
-    const {
-      handleChooseAutoRefresh,
-      handleChooseTimeRange,
-      autoRefresh,
-    } = this.props
-
-    if (absoluteTimeRange && autoRefresh) {
-      handleChooseAutoRefresh(0)
-    }
-
-    handleChooseTimeRange(timeRange)
   }
 }
