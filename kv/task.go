@@ -890,6 +890,7 @@ func (s *Service) forceRun(ctx context.Context, tx Tx, taskID influxdb.ID, sched
 		TaskID:       taskID,
 		RequestedAt:  time.Now().UTC().Format(time.RFC3339),
 		ScheduledFor: t.Format(time.RFC3339),
+		Log:          []influxdb.Log{},
 	}
 
 	// add a clean copy of the run to the manual runs
@@ -1073,6 +1074,7 @@ func (s *Service) createNextRun(ctx context.Context, tx Tx, taskID influxdb.ID, 
 		TaskID:       task.ID,
 		ScheduledFor: nextScheduled.Format(time.RFC3339),
 		Status:       backend.RunScheduled.String(),
+		Log:          []influxdb.Log{},
 	}
 	b, err := tx.Bucket(taskRunBucket)
 	if err != nil {
